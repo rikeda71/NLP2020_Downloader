@@ -43,6 +43,8 @@ func requestProceedingsPage() *http.Response {
 
 func main() {
 	// get request to nlp2020 proceedings page
+	baseurl := "https://www.anlp.jp/nlp2020/program_online/"
+	fmt.Println(baseurl)
 	var resp *http.Response = requestProceedingsPage()
 	defer resp.Body.Close()
 	doc, err := goquery.NewDocumentFromResponse(resp)
@@ -54,7 +56,17 @@ func main() {
 		selector := fmt.Sprintf("body > div > div > div.span9 > div:nth-child(%d) > table > tbody", i)
 		doc.Find(selector).Each(func(_ int, s1 *goquery.Selection) {
 			s1.Find("tr").Each(func(_ int, s2 *goquery.Selection) {
-				fmt.Println(s2.Text())
+				pid := s2.Find(".pid")
+				fmt.Println(pid.Find("span").Attr("id"))
+				fmt.Println(pid.Find("a").Attr("href"))
+				fmt.Println(s2.Find("span.title").Text())
+				time.Sleep(time.Second * 1)
+				// ポスターがダウンロードできなくなっていたので必要ない
+				// s2.Find("td > a").Each(func(_ int, s3 *goquery.Selection) {
+				// 	fmt.Println(s3.Text())
+				// 	fmt.Println(s3.Html())
+				// 	fmt.Println(s3.Attr("href"))
+				// })
 			})
 		})
 	}
