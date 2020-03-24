@@ -1,4 +1,4 @@
-module nlp2020-downlowder
+module nlp2020-downloader
 
 go 1.14
 
